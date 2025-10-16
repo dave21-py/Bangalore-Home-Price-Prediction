@@ -1,7 +1,7 @@
 <p align="center">
-  <img width="400px" src="https://i.imgur.com/your-project-image.png" alt="Woodland Project Logo" />
+  <img width="400px" src="wallpaper.png" alt="Woodland Project Logo" />
   <h2 align="center">Woodland - Bangalore Real Estate Price Predictor</h2>
-  <p align="center">A sophisticated, full-stack web application that leverages a machine learning model to provide instant, data-driven price predictions for real estate in Bangalore.</p>
+  <p align="center">A full-stack website that leverages a machine learning model to provide instant, data-driven price predictions for real estate in Bangalore.</p>
 </p>
 
 <p align="center">
