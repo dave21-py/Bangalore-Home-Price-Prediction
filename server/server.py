@@ -1,29 +1,31 @@
-# 1. Import 'render_template' in addition to the others
+# Import the new CORS library along with the others
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import util
 
-# 2. Tell Flask where your website files are (the 'client' folder)
-#    Since 'server.py' is in the 'server' folder, '../client' goes up one level
-#    and then into the 'client' folder.
 app = Flask(__name__, template_folder="../client", static_folder="../client")
 
+# --- THE FIX ---
+# Apply CORS to your app. This will allow your website to make
+# requests to your API routes from the browser.
+CORS(app)
 
-# 3. Add a new route to serve the app.html file on the main URL
+
+# The rest of your file remains exactly the same.
 @app.route("/")
 def home():
     return render_template("app.html")
 
 
-# --- Your existing API routes are perfect, no changes needed here ---
 @app.route("/get_location_names", methods=["GET"])
 def get_location_names():
     response = jsonify({"locations": util.get_location_names()})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-
+    # You no longer need to add headers manually, CORS handles it.
+    # response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 
-@app.route("/predict_home_price", methods=["GET", "POST"])
+@app.route("/predict_home_price", methods=["POST"])
 def predict_home_price():
     total_sqft = float(request.form["total_sqft"])
     location = request.form["location"]
@@ -33,8 +35,8 @@ def predict_home_price():
     response = jsonify(
         {"estimated_price": util.get_estimated_price(location, total_sqft, bhk, bath)}
     )
-    response.headers.add("Access-Control-Allow-Origin", "*")
-
+    # You no longer need to add headers manually, CORS handles it.
+    # response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 

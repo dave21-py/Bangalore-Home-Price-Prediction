@@ -1,109 +1,224 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Woodland - Intelligent Real Estate</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='app.css') }}"
+        />
+    </head>
+    <body>
+        <header>
+            <div class="logo">WOODLAND</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#estimator">Estimator</a></li>
+                </ul>
+            </nav>
+        </header>
 
-<html>
+        <main>
+            <section class="hero">
+                <video autoplay loop muted playsinline class="hero-video">
+                    <source
+                        src="{{ url_for('static', filename='background3.mp4') }}"
+                        type="video/mp4"
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="hero-content">
+                    <h1>WOODLAND</h1>
+                    <p>Intelligent Real Estate</p>
+                </div>
+            </section>
 
-<head>
+            <section id="about">
+                <h2>A MODERN APPROACH TO REAL ESTATE</h2>
+                <p class="subtitle">
+                    Welcome to Woodland. We combine minimalist design principles
+                    with powerful data analytics to bring clarity to the real
+                    estate market. Our proprietary machine learning model
+                    provides instant, data-driven price estimations to help you
+                    make smarter decisions.
+                </p>
+            </section>
 
-<title>Banglore Home Price Prediction</title>
+            <!-- NEW PROJECTS SECTION -->
+            <section id="projects">
+                <h2>RECENT VALUATIONS</h2>
+                <div class="projects-grid">
+                    <div class="project-item">
+                        <h3>Serene Meadows Villa</h3>
+                        <p class="project-price">Estimated Price: 2.1 Crore</p>
+                    </div>
+                    <div class="project-item">
+                        <h3>Oakridge Modern Home</h3>
+                        <p class="project-price">Estimated Price: 1.8 Crore</p>
+                    </div>
+                    <div class="project-item">
+                        <h3>Lakeside Glass House</h3>
+                        <p class="project-price">Estimated Price: 3.5 Crore</p>
+                    </div>
+                </div>
+            </section>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <!-- REDESIGNED ESTIMATOR SECTION -->
+            <section id="estimator">
+                <h2>INSTANT PRICE ESTIMATOR</h2>
+                <div class="estimator-card">
+                    <div class="form-container">
+                        <div class="form-column">
+                            <h3>Area (Square Feet)</h3>
+                            <input
+                                class="area"
+                                type="text"
+                                id="uiSqft"
+                                name="Squareft"
+                                value="1000"
+                            />
 
-<!-- MODIFIED LINE for JavaScript -->
+                            <h3>Location</h3>
+                            <select class="location" name="" id="uiLocations">
+                                <option
+                                    value=""
+                                    disabled="disabled"
+                                    selected="selected"
+                                >
+                                    Choose a Location
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-column">
+                            <h3>BHK</h3>
+                            <div class="switch-field">
+                                <input
+                                    type="radio"
+                                    id="radio-bhk-1"
+                                    name="uiBHK"
+                                    value="1"
+                                /><label for="radio-bhk-1">1</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bhk-2"
+                                    name="uiBHK"
+                                    value="2"
+                                    checked
+                                /><label for="radio-bhk-2">2</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bhk-3"
+                                    name="uiBHK"
+                                    value="3"
+                                /><label for="radio-bhk-3">3</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bhk-4"
+                                    name="uiBHK"
+                                    value="4"
+                                /><label for="radio-bhk-4">4</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bhk-5"
+                                    name="uiBHK"
+                                    value="5"
+                                /><label for="radio-bhk-5">5</label>
+                            </div>
+                            <h3>Bathrooms</h3>
+                            <div class="switch-field">
+                                <input
+                                    type="radio"
+                                    id="radio-bath-1"
+                                    name="uiBathrooms"
+                                    value="1"
+                                /><label for="radio-bath-1">1</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bath-2"
+                                    name="uiBathrooms"
+                                    value="2"
+                                    checked
+                                /><label for="radio-bath-2">2</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bath-3"
+                                    name="uiBathrooms"
+                                    value="3"
+                                /><label for="radio-bath-3">3</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bath-4"
+                                    name="uiBathrooms"
+                                    value="4"
+                                /><label for="radio-bath-4">4</label>
+                                <input
+                                    type="radio"
+                                    id="radio-bath-5"
+                                    name="uiBathrooms"
+                                    value="5"
+                                /><label for="radio-bath-5">5</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submission-area">
+                        <button
+                            class="submit"
+                            onclick="onClickedEstimatePrice()"
+                            type="button"
+                        >
+                            Estimate Price
+                        </button>
+                        <div id="uiEstimatedPrice" class="result">
+                            <h2>Your Estimate Here</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
-<script src="{{ url_for('static', filename='app.js') }}"></script>
+        <!-- NEW FOOTER SECTION -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h4>WOODLAND</h4>
+                    <p>Intelligent Real Estate.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Support Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li>
+                            <a href="https://www.linkedin.com" target="_blank"
+                                >LinkedIn</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://github.com/dave21-py/Bangalore-Home-Price-Prediction"
+                                target="_blank"
+                                >GitHub</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Woodland. All Rights Reserved.</p>
+            </div>
+        </footer>
 
-<!-- MODIFIED LINE for CSS -->
-
-<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
-
-</head>
-
-<body>
-
-<div class="img"></div>
-
-<form class="form">
-
-<h2>Area (Square Feet)</h2>
-
-<input class="area" type="text" id="uiSqft" class="floatLabel" name="Squareft" value="1000">
-
-<h2>BHK</h2>
-
-<div class="switch-field">
-
-<input type="radio" id="radio-bhk-1" name="uiBHK" value="1"/>
-
-<label for="radio-bhk-1">1</label>
-
-<input type="radio" id="radio-bhk-2" name="uiBHK" value="2" checked/>
-
-<label for="radio-bhk-2">2</label>
-
-<input type="radio" id="radio-bhk-3" name="uiBHK" value="3"/>
-
-<label for="radio-bhk-3">3</label>
-
-<input type="radio" id="radio-bhk-4" name="uiBHK" value="4"/>
-
-<label for="radio-bhk-4">4</label>
-
-<input type="radio" id="radio-bhk-5" name="uiBHK" value="5"/>
-
-<label for="radio-bhk-5">5</label>
-
-</div>
-
-</form>
-
-<form class="form">
-
-<h2>Bath</h2>
-
-<div class="switch-field">
-
-<input type="radio" id="radio-bath-1" name="uiBathrooms" value="1"/>
-
-<label for="radio-bath-1">1</label>
-
-<input type="radio" id="radio-bath-2" name="uiBathrooms" value="2" checked/>
-
-<label for="radio-bath-2">2</label>
-
-<input type="radio" id="radio-bath-3" name="uiBathrooms" value="3"/>
-
-<label for="radio-bath-3">3</label>
-
-<input type="radio" id="radio-bath-4" name="uiBathrooms" value="4"/>
-
-<label for="radio-bath-4">4</label>
-
-<input type="radio" id="radio-bath-5" name="uiBathrooms" value="5"/>
-
-<label for="radio-bath-5">5</label>
-
-</div>
-
-<h2>Location</h2>
-
-<div>
-
-<select class="location" name="" id="uiLocations">
-
-<option value="" disabled="disabled" selected="selected">Choose a Location</option>
-
-<option>Electronic City</option>
-
-<option>Rajaji Nagar</option>
-
-</select>
-
-</div>
-
-<button class="submit" onclick="onClickedEstimatePrice()" type="button">Estimate Price</button>
-
-<div id="uiEstimatedPrice" class="result"> <h2></h2> </div>
-
-</body>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+        <script src="{{ url_for('static', filename='app.js') }}"></script>
+    </body>
 </html>
