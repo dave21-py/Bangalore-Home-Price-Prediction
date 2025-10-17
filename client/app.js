@@ -33,13 +33,36 @@ $(document).ready(function () {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // --- THE DEFINITIVE FIX ---
+  // --- THIS SECTION WAS MISSING ---
   // STEP 1: Use JS to hide all sections except the hero. This avoids CSS conflicts.
   gsap.set("section:not(.hero)", { opacity: 0, y: 50 });
 
   // STEP 2: Animate the header and hero text on page load
   const pageLoadTl = gsap.timeline({ defaults: { ease: "power3.out" } });
   pageLoadTl.from("header", { y: -50, opacity: 0, duration: 1, delay: 0.2 });
+
+  // Animate the hero text cycling
+  let heroTl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+  heroTl.fromTo(
+    ".hero-title-anim span:first-child",
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+  );
+  heroTl.to(
+    ".hero-title-anim span:first-child",
+    { opacity: 0, y: -30, duration: 1, ease: "power3.in" },
+    "+=2",
+  );
+  heroTl.fromTo(
+    ".hero-title-anim span:last-child",
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+  );
+  heroTl.to(
+    ".hero-title-anim span:last-child",
+    { opacity: 0, y: -30, duration: 1, ease: "power3.in" },
+    "+=2",
+  );
 
   // STEP 3: Animate all other sections TO a visible state ON SCROLL
   gsap.utils.toArray("section:not(.hero)").forEach((section) => {
@@ -63,6 +86,7 @@ $(document).ready(function () {
     duration: 0.8,
     stagger: 0.2,
   });
+  // --- END OF MISSING SECTION ---
 
   console.log("Animations initialized.");
 });
@@ -70,18 +94,6 @@ $(document).ready(function () {
 /* =================================================================================
    III. ML PRICE ESTIMATOR FUNCTIONS (Global Scope)
    ================================================================================= */
-
-function getBathValue() {
-  /* ... function code ... */
-}
-function getBHKValue() {
-  /* ... function code ... */
-}
-function onClickedEstimatePrice() {
-  /* ... function code ... */
-}
-
-// (The full function bodies for these three are correct from the previous version)
 
 function getBathValue() {
   var uiBathrooms = document.getElementsByName("uiBathrooms");
