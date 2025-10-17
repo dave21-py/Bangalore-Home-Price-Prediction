@@ -6,23 +6,47 @@ $(document).ready(function () {
        ================================================================================= */
 
   function onPageLoad() {
-    console.log("Fetching locations...");
-    var url = "/get_location_names";
+    console.log("Fetching locations from server...");
 
-    $.get(url, function (data, status) {
-      console.log("Successfully received location data.");
-      if (data) {
-        var locations = data.locations;
-        $("#uiLocations").empty();
-        var defaultOption = new Option("Choose a Location", "", true, true);
-        $(defaultOption).prop("disabled", true);
-        $("#uiLocations").append(defaultOption);
-        for (var i in locations) {
-          $("#uiLocations").append(new Option(locations[i]));
+    // --- THE DEFINITIVE FIX ---
+    // We are switching to the more robust $.ajax method to explicitly
+    // tell the browser to expect JSON data. This prevents silent parsing errors.
+    $.ajax({
+      url: "/get_location_names",
+      type: "GET",
+      dataType: "json", // This is the critical line
+      success: function (data) {
+        console.log("Successfully parsed location data.");
+        if (data && Array.isArray(data.locations)) {
+          var locations = data.locations;
+          var uiLocations = $("#uiLocations");
+
+          uiLocations.empty();
+          uiLocations.append(new Option("Choose a Location", "", true, true));
+          uiLocations.find('option[value=""]').prop("disabled", true);
+
+          locations.forEach(function (location) {
+            uiLocations.append(new Option(location));
+          });
+          console.log(locations.length + " locations have been loaded.");
+        } else {
+          console.error(
+            "Data received, but it is not in the expected format.",
+            data,
+          );
         }
-      }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error(
+          "Failed to fetch locations. Status: " +
+            textStatus +
+            ", Error: " +
+            errorThrown,
+        );
+      },
     });
   }
+
   onPageLoad();
 
   /* =================================================================================
@@ -30,18 +54,12 @@ $(document).ready(function () {
        ================================================================================= */
 
   console.log("Initializing animations...");
-
   gsap.registerPlugin(ScrollTrigger);
 
-  // --- THIS SECTION WAS MISSING ---
-  // STEP 1: Use JS to hide all sections except the hero. This avoids CSS conflicts.
   gsap.set("section:not(.hero)", { opacity: 0, y: 50 });
-
-  // STEP 2: Animate the header and hero text on page load
   const pageLoadTl = gsap.timeline({ defaults: { ease: "power3.out" } });
   pageLoadTl.from("header", { y: -50, opacity: 0, duration: 1, delay: 0.2 });
 
-  // Animate the hero text cycling
   let heroTl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
   heroTl.fromTo(
     ".hero-title-anim span:first-child",
@@ -64,7 +82,6 @@ $(document).ready(function () {
     "+=2",
   );
 
-  // STEP 3: Animate all other sections TO a visible state ON SCROLL
   gsap.utils.toArray("section:not(.hero)").forEach((section) => {
     gsap.to(section, {
       opacity: 1,
@@ -86,7 +103,6 @@ $(document).ready(function () {
     duration: 0.8,
     stagger: 0.2,
   });
-  // --- END OF MISSING SECTION ---
 
   console.log("Animations initialized.");
 });
@@ -94,7 +110,6 @@ $(document).ready(function () {
 /* =================================================================================
    III. ML PRICE ESTIMATOR FUNCTIONS (Global Scope)
    ================================================================================= */
-
 function getBathValue() {
   var uiBathrooms = document.getElementsByName("uiBathrooms");
   for (var i in uiBathrooms) {
@@ -104,7 +119,6 @@ function getBathValue() {
   }
   return -1;
 }
-
 function getBHKValue() {
   var uiBHK = document.getElementsByName("uiBHK");
   for (var i in uiBHK) {
@@ -114,21 +128,16 @@ function getBHKValue() {
   }
   return -1;
 }
-
 function onClickedEstimatePrice() {
-  console.log("Estimate price button clicked");
   var sqft = document.getElementById("uiSqft");
   var bhk = getBHKValue();
   var bathrooms = getBathValue();
   var location = document.getElementById("uiLocations");
   var estPrice = document.getElementById("uiEstimatedPrice");
   var submitBtn = document.querySelector(".submit");
-
   submitBtn.textContent = "Estimating...";
   estPrice.innerHTML = "<h2></h2>";
-
   var url = "/predict_home_price";
-
   $.post(
     url,
     {
