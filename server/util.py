@@ -1,6 +1,7 @@
 import pickle
 import json
 import numpy as np
+import os  # <-- The required import for pathing
 
 __locations = None
 __data_columns = None
@@ -27,14 +28,21 @@ def load_saved_artifacts():
     print("loading saved artifacts...start")
     global __data_columns
     global __locations
-
-    with open("./artifacts/columns.json", "r") as f:
-        __data_columns = json.load(f)["data_columns"]
-        __locations = __data_columns[3:]  # first 3 columns are sqft, bath, bhk
-
     global __model
+
+    # --- THIS IS THE CORRECTED, ROBUST PATHING LOGIC ---
+    # It builds an absolute path to the artifacts folder from the location of this file
+    artifacts_path = os.path.join(os.path.dirname(__file__), "artifacts")
+    columns_path = os.path.join(artifacts_path, "columns.json")
+    model_path = os.path.join(artifacts_path, "banglore_home_prices_model.pickle")
+    # --- END OF CORRECTION ---
+
+    with open(columns_path, "r") as f:
+        __data_columns = json.load(f)["data_columns"]
+        __locations = __data_columns[3:]
+
     if __model is None:
-        with open("./artifacts/banglore_home_prices_model.pickle", "rb") as f:
+        with open(model_path, "rb") as f:
             __model = pickle.load(f)
     print("loading saved artifacts...done")
 
